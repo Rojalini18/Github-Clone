@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="./style/style.css">
+	<script src="https://code.iconify.design/2/2.1.0/iconify.min.js"></script>
+	<title></title>
+</head>
+<body>
+		<div id="nav-container"></div>
+		<div id="user_container">
+			<div id="user_navbar">
+				<ul>
+					<li class="list-item active">
+						<div>
+							<span class="iconify" data-icon="akar-icons:book"></span>
+							<span>Overview</span>
+						</div>
+					</li>
+					<li class="list-item">
+						<div>
+							<span class="iconify" data-icon="octicon:repo-16"></span>
+							<span>Repositories</span>
+
+						</div>
+					</li>
+					<li class="list-item">
+						<div>
+							<span class="iconify" data-icon="octicon:table-16"></span>
+							<span>Projects</span>
+						</div>
+					</li>
+					<li class="list-item">
+						<div>
+							<span class="iconify" data-icon="octicon:package-16"></span>
+							<span>Packages</span>
+						</div>
+					</li>
+					<li class="list-item">
+						<div>
+							<span class="iconify" data-icon="ant-design:star-outlined"></span> 
+							<span>Stars</span>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div id="container" class="home__con">
+				<div class="home_container">
+					<div class="home_repo">
+						<div>
+							<div>
+								<p>Repositories</p>
+								<button>
+									<span class="iconify" data-icon="octicon:repo-16"></span>
+									New
+								</button>
+							</div>
+							<input type="text" placeholder="Find a repository...">
+
+							<p>
+								<span>Recent activity</span><br>
+								When you take actions across GitHub, we’ll provide links to that activity here.
+							</p>
+						</div>
+
+					</div>
+					<div class="scroll">
+						<span class="iconify up" data-icon="octicon:triangle-down-16"></span>
+						<span></span>
+						<span class="iconify down" data-icon="octicon:triangle-down-16"></span>
+					</div>
+					<div class="home_Activity">
+						<h3>All activity</h3>
+						<div class="home_Activity--main">
+							<div class="home_Activity--head"> 
+								<img src="https://static.toiimg.com/thumb/msid-67586673,width-800,height-600,resizemode-75,imgsize-3918697,pt-32,y_pad-40/67586673.jpg" id="profile-img"> 
+								<span><b>CMCDragonkai</b> starred <b>nodejs-mobile/nodejs-mobile</b> 10 days ago</span>
+							</div>
+							<div class="home_activity--repo">
+								<div>
+									<h3>nodejs-mobile/nodejs-mobile</h3>
+									<p>Full-fledged Node.js on Android and iOS</p>
+									<span class="iconify" data-icon="ant-design:star-outlined"></span>37
+								</div>
+								<div>
+									<button>
+										<span class="iconify" data-icon="ant-design:star-outlined"></span><span>Star</span>
+									</button>
+									<button>
+										<span class="iconify" data-icon="octicon:triangle-down-16"></span>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="home_Activity--main">
+							<div class="home_Activity--head"> 
+								<img src="https://static.toiimg.com/thumb/msid-67586673,width-800,height-600,resizemode-75,imgsize-3918697,pt-32,y_pad-40/67586673.jpg" id="profile-img"> 
+								<span><b>CMCDragonkai</b> created a repository <b>MatrixAI/Polykey-CLI</b> on 15 Dec 2021</span>
+							</div>
+							<div class="home_activity--repo">
+								<div>
+									<h3>MatrixAI/Polykey-CLI</h3>
+									Updated Dec 15
+								</div>
+								<div>
+									<button>
+										<span class="iconify" data-icon="ant-design:star-outlined"></span><span>Star</span>
+									</button>
+									<button>
+										<span class="iconify" data-icon="octicon:triangle-down-16"></span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="Explore_repo">
+						<h4>Explore repositories</h4>
+						<div>
+							<h3>micromata/awesome -javascript-learning</h3>
+							<p>
+								A tiny list limited to the best JavaScript Learning Resources
+							</p>
+							<span>JavaScript &nbsp;&nbsp;3.4k</span>
+						</div>
+						<div>
+							<h3>partho-maple/coding-interview-gym</h3>
+							<p>
+								leetcode.com , algoexpert io solutions in python and swift
+							</p>
+							<span>Python &nbsp;&nbsp;639</span>
+						</div>
+						<div>
+							<h3>JoshuaWise/better-sqlite3</h3>
+							<p>
+								The fastest and simplest library for SQLite 3 in Node.js 
+							</p>
+							<span>Node &nbsp;&nbsp;3.4k</span>
+						</div>
+						<a href="">Explore more </a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+</body>
+</html>
+
+<script type="module"> 
+
+	import navbar from "./componets/navbar.js"
+	import {getUser , appendData} from "./scripts/getUser.js"
+
+	let nav = document.querySelector("#nav-container")
+	nav.innerHTML = navbar()
+
+	let input = document.querySelector("#search-input")
+	let main = document.querySelector("#container")
+	var response;
+	input.addEventListener("keypress" , searchUser)
+
+	let user_nav = document.querySelector("#user_navbar")
+	var home = document.querySelector(".home__con")
+	async function searchUser(event){
+		
+			
+			if(event.key == "Enter"){
+				main.innerHTML = ""
+				let query = input.value
+				response = await getUser(query)
+				console.log(response)
+				console.log(response.message)
+				if(response.message != "Not Found"){
+					let {avatar_url} = response
+					appendData(response , main , "Overview")
+					document.querySelector("#profile-img").src = avatar_url
+					user_nav.style.display = "block";
+				}else{
+					main.innerHTML = '<img src="https://i.stack.imgur.com/Esppm.png" class="not_found">'
+					user_nav.style.display = "none";
+				}
+
+				home.classList.remove("home__con")
+			}
+
+
+	}
+
+	
+
+	var items = document.querySelectorAll(".list-item")
+	for(var i = 0 ; i < items.length ; i++){
+		items[i].addEventListener("click" , function(){
+			var cur = document.querySelector(".active")
+			cur.classList.remove("active")
+			this.classList.add("active")
+			var text = this.innerText
+			console.log(text)
+			appendData(response , main , text)
+			
+			
+			
+		})
+	}
+
+
+	var profit_user = document.querySelector("#profile_user")
+	profit_user.addEventListener("click" , function(){
+		document.querySelector(".show_user_details").classList.toggle("show_user")
+	})
+
+
+	var user_data = JSON.parse(localStorage.getItem("user_data"))
+	console.log(user_data)
+
+	var user = document.querySelector("#username")
+	user.innerHTML = `<b>${user_data.username}</b>`
+
+
+
+	var sign_out = document.querySelector("#sign_out")
+	sign_out.style.cursor = "pointer"
+	sign_out.addEventListener("click" , function(){
+		window.location.href = "index.html"
+	})
+
+</script>
+
+

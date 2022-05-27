@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://code.iconify.design/2/2.1.0/iconify.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="./style/home.css">
+	<title></title>
+</head>
+<body>
+	<div class="form_page">
+		<a href="index.html">
+			<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/600px-Octicons-mark-github.svg.png" width="50px" height="50px" />
+		</a>
+		<h1>Sign in to GitHub</h1>
+		<div class="erro_div">
+			<p>Incorrect username or password.</p>
+			<span class="iconify hide_erro_msg" data-icon="gridicons:cross-small"></span>
+		</div>
+		<form onsubmit="login(event)" class="form">
+		<label>Username</label>
+		<input type="text" id="login_username">
+		<label>
+			<span>Password</span>
+			<a href="">Forgot password?</a>
+		</label>
+		<input type="password" id="login_password">
+		<input type="submit" value="Sign in" id="submit">
+		</form>
+
+		<div class="new_acc">
+			<p>New to GitHub?<a href="signUp.html">Create an account</a></p>
+		</div>
+
+		<ul class="git_policy">
+			<li><a href="#">Terms</a></li>
+			<li><a href="#">Privacy</a></li>
+			<li><a href="#">Security</a></li>
+			<li>Contact GitHub</li>
+		</ul>
+	</div>
+</body>
+</html>
+
+<script>
+	async function login(event){
+		event.preventDefault()
+		try{
+			var login_data = {
+				username : document.getElementById("login_username").value ,
+				password : document.getElementById("login_password").value
+			}
+
+			login_data = JSON.stringify(login_data)
+			console.log(login_data)
+		}catch(err){
+			console.log(err)
+		}
+
+		let log_api = `https://masai-api-mocker.herokuapp.com/auth/login`
+		let response = await fetch(log_api , {
+			method : "POST" ,
+			body:login_data ,
+			headers:{
+				"Content-Type":"application/json",
+							}
+
+		})
+		let data = await response.json()
+		console.log(data)
+		let username = document.getElementById("login_username").value
+		if(!data.error){
+			getData(username , data.token)
+		}else{
+			var err = document.querySelector(".erro_div")
+			err.style.display = "flex"
+			var msg = document.querySelector(".hide_erro_msg")
+			msg.addEventListener("click" , function(){
+				err.style.display = "none"
+			})
+		}
+		
+	}
+
+
+	async function getData(username , token){
+		let data_api = `https://masai-api-mocker.herokuapp.com/user/${username}`
+
+		let response = await fetch(data_api , {
+			headers:{
+				"Content-Type":"application/json" ,
+				"Authorization": `Bearer ${token}`
+
+			}
+		})
+
+		let data = await response.json()
+		console.log(data)
+		localStorage.setItem("user_data" , JSON.stringify(data))
+		window.location.href = "home.html"
+		
+	}
+
+
+</script>

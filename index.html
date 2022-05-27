@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-JNS5R1EDV7"></script>
+	<script>
+  	window.dataLayer = window.dataLayer || [];
+  	function gtag(){dataLayer.push(arguments);}
+  	gtag('js', new Date());
+
+  	gtag('config', 'G-JNS5R1EDV7');
+	</script>
+	<link rel="stylesheet" type="text/css" href="./style/style.css">
+	<link rel="stylesheet" type="text/css" href="./style/home.css">
+	<script src="https://code.iconify.design/2/2.1.0/iconify.min.js"></script>
+
+	<title></title>
+</head>
+<body>
+	<div class="main_home">
+		<div id="navbar" class="Home_navbar"> 
+		<div id="logo">
+			<a href="index.html"><img src="https://avatars.githubusercontent.com/u/9919?s=280&v=4"></a> 
+		</div>
+		<a href="">Why Github?</a>
+		<div id="options"> 
+			<ul id="list"> 
+				<li><a href="">Team</a></li>
+				<li><a href="">Enterprise</a></li>
+				<li><a href="">Explore</a></li>
+				<li><a href="expoler.html">Marketplace Pricing</a></li>
+			</ul>
+		</div>
+		<div id="search">
+			<input type="text" id="search-input" placeholder="search here"> 
+		</div>
+
+		<a href="signIn.html" id="sign_in">Sign in</a>
+		<a href="signUp.html" id="sign_up">Sign up</a>
+
+		</div>
+		<div id="user_container">
+				<div id="user_navbar">
+					<ul>
+						<li class="list-item active">
+							<div>
+								<span class="iconify" data-icon="akar-icons:book"></span>
+								<span>Overview</span>
+							</div>
+						</li>
+						<li class="list-item">
+							<div>
+								<span class="iconify" data-icon="octicon:repo-16"></span>
+								<span>Repositories</span>
+
+							</div>
+						</li>
+						<li class="list-item">
+							<div>
+								<span class="iconify" data-icon="octicon:table-16"></span>
+								<span>Projects</span>
+							</div>
+						</li>
+						<li class="list-item">
+							<div>
+								<span class="iconify" data-icon="octicon:package-16"></span>
+								<span>Packages</span>
+							</div>
+						</li>
+						<li class="list-item">
+						<div>
+							<span class="iconify" data-icon="ant-design:star-outlined"></span> 
+							<span>Stars</span>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="container" class="home_main">
+			<div class="home_des">
+			
+				<h1>Where the world build software</h1>
+				<p>Millions of developers and companies build, ship, and maintain their software on GitHub—the largest and most 	advanced development platform in the world.
+				</p>
+				<div class="home_input"> 
+					<input type="text" placeholder="Email address">
+					<button>Sign up for GitHub</button>
+				</div>
+			</div>
+			<div class="earth_video">
+				<video playsinline autoplay muted loop>
+  					<source src="./video/earth.mp4" type="video/mp4">
+  					<source src="./video/earth.mp4" type="video/ogg">
+					Your browser does not support the video tag.
+				</video>	
+			</div>
+		</div>
+	</div>	
+</body>
+</html>
+
+
+<script type="module">
+	import {getUser , appendData} from "./scripts/getUser.js"
+
+
+	let input = document.querySelector("#search-input")
+	let main = document.querySelector("#container")
+	var response;
+	input.addEventListener("keypress" , searchUser)
+
+	let user_nav = document.querySelector("#user_navbar")
+	let home_container = document.querySelector(".main_home")
+	var home = document.querySelector(".home__con")
+	async function searchUser(event){
+		
+			
+			if(event.key == "Enter"){
+				main.innerHTML = ""
+				let query = input.value
+				response = await getUser(query)
+				console.log(response)
+				console.log(response.message)
+				if(response.message != "Not Found"){
+					let {avatar_url} = response
+					appendData(response , main , "Overview")
+					user_nav.style.display = "block";
+					home_container.classList.add("home_white")
+				}else{
+					main.innerHTML = '<img src="https://i.stack.imgur.com/Esppm.png" class="not_found">'
+					user_nav.style.display = "none";
+				}
+
+				home.classList.remove("home__con")
+			}
+	}
+
+	var items = document.querySelectorAll(".list-item")
+	for(var i = 0 ; i < items.length ; i++){
+		items[i].addEventListener("click" , function(){
+			var cur = document.querySelector(".active")
+			cur.classList.remove("active")
+			this.classList.add("active")
+			var text = this.innerText
+			console.log(text)
+			appendData(response , main , text)
+			
+			
+			
+		})
+	}
+
+</script>
